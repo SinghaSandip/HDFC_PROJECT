@@ -1,3 +1,4 @@
+#To run: uvicorn server:app --reload --host 0.0.0.0 --port 8000
 # Loan Approval System - Backend API
 
 A FastAPI backend service that processes loan application files and determines approval status based on document submission criteria.
