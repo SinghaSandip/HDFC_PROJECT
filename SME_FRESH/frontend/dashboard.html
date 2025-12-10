@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Uploaded Files Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+    <h1> File Processing Dashboard</h1>
+
+    <div class="summary-box">
+        <div class="card">
+            <h2 id="totalFiles">0</h2>
+            Total Files
+        </div>
+
+        <div class="card">
+            <h2 id="approvedCount">0</h2>
+            Approved
+        </div>
+
+        <div class="card">
+            <h2 id="rejectedCount">0</h2>
+            Rejected
+        </div>
+    </div>
+
+    <div class="table-box">
+        <table>
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Total Rows</th>
+                    <th>Download</th>
+                </tr>
+            </thead>
+            <tbody id="fileTable"></tbody>
+        </table>
+    </div>
+
+    <a href="index.html" class="nav-link"> Back to Upload</a>
+</div>
+
+<script>
+fetch("http://127.0.0.1:8000/api/processed-files")
+    .then(res => res.json())
+    .then(files => {
+        let tbody = document.getElementById("fileTable");
+
+        document.getElementById("totalFiles").innerText = files.length;
+
+        files.forEach(file => {
+            tbody.innerHTML += `
+                <tr onclick="selectFile('${file.filename}', ${file.approved ?? 0}, ${file.rejected ?? 0})">
+                    <td>${file.filename}</td>
+                    <td>${(file.approved ?? 0) + (file.rejected ?? 0)}</td>
+                    <td><a class="download-btn" href="http://127.0.0.1:8000/api/download/${file.filename}">Download</a></td>
+                </tr>
+            `;
+        });
+    });
+
+function selectFile(name, approved, rejected) {
+    document.getElementById("approvedCount").innerText = approved;
+    document.getElementById("rejectedCount").innerText = rejected;
+
+    alert(" Selected file: " + name);
+}
+</script>
+
+</body>
+</html>
